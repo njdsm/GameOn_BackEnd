@@ -6,4 +6,4 @@ class StatSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Stat
-        fields = ['id', 'player', 'placement']
+        fields = ['id', 'game', 'player', 'placement']

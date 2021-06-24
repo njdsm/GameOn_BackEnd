@@ -10,8 +10,43 @@ from django.http import Http404
 
 class StatsList(APIView):
 
+    def get_stats_player(self, fk):
+        try:
+            return Stat.objects.filter(player_id=fk)
+        except Stat.DoesNotExist:
+            return Response(Http404)
+
+    def get_stats_game(self, fk):
+        try:
+            return Stat.objects.filter(game_id=fk)
+        except Stat.DoesNotExist:
+            return Response(Http404)
+
+    def get_specific_stat(self, pk):
+        try:
+            return Stat.objects.get(pk=pk)
+        except Stat.DoesNotExist:
+            return Response(Http404)
+
     def get(self, request):
-        stats = Stat.objects.all()
+        stats = ""
+        try:
+            if request.query_params['game_id']:
+                stats = self.get_stats_game(int(request.query_params['game_id']))
+        except:
+            pass
+        try:
+            if request.query_params['player_id']:
+                stats = self.get_stats_player(int(request.query_params['player_id']))
+        except:
+            pass
+        try:
+            if request.query_params['stat']:
+                stats = self.get_specific_stat(int(request.query_params['stat']))
+        except:
+            pass
+        if stats == "":
+            stats = Stat.objects.all()
         serializer = StatSerializer(stats, many=True)
         return Response(serializer.data)
 
@@ -25,22 +60,7 @@ class StatsList(APIView):
 
 class StatsDetail(APIView):
 
-    def get_stats(self, fk):
-        try:
-            return Stat.objects.get(fk=fk, many=True)
-        except Stat.DoesNotExist:
-            raise Http404
 
-    def get_specific_stat(self, pk):
-        try:
-            return Stat.objects.get(pk=pk)
-        except Stat.DoesNotExist:
-            raise Http404
-
-    def get(self, pk):
-        stats = self.get_stats(pk)
-        serializer = StatSerializer(stats)
-        return Response(serializer.data)
 
     # def put(self, request, pk):
     #     pass
