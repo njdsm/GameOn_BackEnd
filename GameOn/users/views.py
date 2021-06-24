@@ -11,8 +11,9 @@ from django.http import Http404
 class UserList(APIView):
 
     def get(self, request):
-        pass
-        # return Response(serializer.data)
+        user = User.objects.all()
+        serializer = UserSerializer(user, many=True)
+        return Response(serializer.data)
 
     def post(self, request):
         serializer = UserSerializer(data=request.data)
