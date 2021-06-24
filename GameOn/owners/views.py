@@ -9,18 +9,19 @@ from django.http import Http404
 
 
 class OwnersList(APIView):
-    pass
 
-    # def get(self, request):
-    #     pass
-    #     # return Response(serializer.data)
-    #
-    # def post(self, request):
-    #     serializer = UserSerializer(data=request.data)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    #     return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+    def get(self, request):
+        owner = Owner.objects.all()
+        serializer = OwnerSerializer(owner, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = OwnerSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
 class OwnersDetail(APIView):
