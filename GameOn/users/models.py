@@ -11,3 +11,4 @@ class User(models.Model):
     password = models.CharField(max_length=50, null=True, blank=True)
     phone = models.CharField(max_length=50, null=True, blank=True)
     points = models.IntegerField(null=True, blank=True)
+    host = models.BooleanField(default=False)

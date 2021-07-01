@@ -11,15 +11,18 @@ from django.http import Http404
 class UserList(APIView):
 
     def get(self, request):
-        if 'user_name' in request.data:
-            user = User.objects.get(user_name=request.data['user_name'])
-            serializer = UserSerializer(user)
-
-        else:
-            user = User.objects.all()
-            serializer = UserSerializer(user, many=True)
+        user = User.objects.all()
+        serializer = UserSerializer(user, many=True)
 
         return Response(serializer.data)
+
+    def put(self, request):
+        try:
+            user = User.objects.get(user_name=request.data['user_name'], password=request.data['password'])
+            serializer = UserSerializer(user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def post(self, request):
         serializer = UserSerializer(data=request.data)
