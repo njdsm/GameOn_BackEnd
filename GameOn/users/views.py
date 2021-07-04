@@ -17,12 +17,21 @@ class UserList(APIView):
         return Response(serializer.data)
 
     def put(self, request):
-        try:
-            user = User.objects.get(user_name=request.data['user_name'], password=request.data['password'])
-            serializer = UserSerializer(user)
+        user = User.objects.get(user_name=request.data['user_name'], password=request.data['password'])
+        user.logged_in = True
+        updated_user = {'user_name': user.user_name,
+                        'first_name': user.first_name,
+                        'last_name': user.last_name,
+                        'email': user.email,
+                        'logged_in': user.logged_in,
+                        'points': user.points,
+                        'phone': user.phone,
+                        'password': user.password}
+        serializer = UserSerializer(user, data=updated_user)
+        if serializer.is_valid():
+            serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def post(self, request):
         serializer = UserSerializer(data=request.data)
