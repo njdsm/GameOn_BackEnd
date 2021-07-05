@@ -1,11 +1,45 @@
 from .models import CurrentGame as Game
-from .serializers import GameSerializer
+from .models import Answers
+from .serializers import GameSerializer, AnswerSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.http import Http404
+from twilio.rest import Client
+from twilio.twiml.messaging_response import MessagingResponse
+
 
 # Create your views here.
+class TwilioList(APIView):
+
+    def post(self, request):
+        account_sid = 'AC5bf22d5d8151082033faf4441f0c4263'
+        auth_token = 'da84b67d891c552aeef2c09ffa5336ab'
+        client = Client(account_sid, auth_token)
+        if "question" in request.data:
+            question = request.data["question"]
+            message = client.messages.create(
+                body=question,
+                from_='+13126266151',
+                to='+15154910775',
+            )
+            return Response(status=status.HTTP_200_OK)
+        else:
+            message = client.messages.create(
+                body="We got your answer!",
+                from_='+13126266151',
+                to='+15154910775',
+            )
+
+            payload = {
+                "answer": request.data["From"],
+                "phone": request.data["Body"]
+            }
+            serializer = AnswerSerializer(data=payload)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
 class CurrentGamesList(APIView):
