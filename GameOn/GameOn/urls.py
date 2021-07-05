@@ -25,4 +25,5 @@ urlpatterns = [
     path('roles/', include('roles.urls')),
     path('owners/', include('owners.urls')),
     path('games/', include('games.urls')),
+    path('current_game/', include('currentGame.urls'))
 ]

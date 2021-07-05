@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'roles.apps.RolesConfig',
     'stats.apps.StatsConfig',
     'userroles.apps.UserrolesConfig',
-    'users.apps.UsersConfig'
+    'users.apps.UsersConfig',
+    'currentGame.apps.CurrentgameConfig'
 ]
 
 MIDDLEWARE = [
