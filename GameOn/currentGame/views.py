@@ -17,18 +17,17 @@ class TwilioList(APIView):
         auth_token = '6139a0120f2097c9933d367f76af3190'
         client = Client(account_sid, auth_token)
         if "question" in request.data:
-            question = request.data["question"]
             client.messages.create(
-                body=question,
+                body=request.data["question"]["question"],
                 from_='+13126266151',
-                to='+15154910775',
+                to='+1' + request.data["user"]["phone"],
             )
             return Response(status=status.HTTP_200_OK)
         else:
             client.messages.create(
                 body="We got your answer!",
                 from_='+13126266151',
-                to='+15154910775',
+                to=request.data["From"],
             )
 
             payload = {
