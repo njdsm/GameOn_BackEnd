@@ -14,32 +14,54 @@ class TwilioList(APIView):
 
     def post(self, request):
         account_sid = 'AC5bf22d5d8151082033faf4441f0c4263'
-        auth_token = 'da84b67d891c552aeef2c09ffa5336ab'
+        auth_token = '6139a0120f2097c9933d367f76af3190'
         client = Client(account_sid, auth_token)
         if "question" in request.data:
             question = request.data["question"]
-            message = client.messages.create(
+            client.messages.create(
                 body=question,
                 from_='+13126266151',
                 to='+15154910775',
             )
             return Response(status=status.HTTP_200_OK)
         else:
-            message = client.messages.create(
+            client.messages.create(
                 body="We got your answer!",
                 from_='+13126266151',
                 to='+15154910775',
             )
 
             payload = {
-                "answer": request.data["From"],
-                "phone": request.data["Body"]
+                "answer": request.data["Body"],
+                "phone": request.data["From"]
             }
             serializer = AnswerSerializer(data=payload)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+
+class AnswersList(APIView):
+
+    def get(self, request):
+        answers = Answers.objects.all()
+        serializer = AnswerSerializer(answers, many=True)
+        return Response(serializer.data)
+
+
+class AnswersDetails(APIView):
+
+    def get_answer(self, pk):
+        try:
+            return Answers.objects.get(pk=pk)
+        except Answers.DoesNotExist:
+            raise Http404
+
+    def delete(self, request, pk):
+        answer = self.get_answer(pk)
+        answer.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class CurrentGamesList(APIView):

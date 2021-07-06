@@ -13,4 +13,4 @@ class AnswerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Answers
-        fields = ['answer', 'phone']
+        fields = ['id', 'answer', 'phone']

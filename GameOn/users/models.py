@@ -13,3 +13,4 @@ class User(models.Model):
     points = models.IntegerField(null=True, blank=True)
     host = models.BooleanField(default=False)
     logged_in = models.BooleanField(default=False)
+    score = models.IntegerField(null=True, blank=True, default=0)
