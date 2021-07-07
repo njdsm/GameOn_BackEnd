@@ -14,7 +14,7 @@ class TwilioList(APIView):
 
     def post(self, request):
         account_sid = 'AC5bf22d5d8151082033faf4441f0c4263'
-        auth_token = '6139a0120f2097c9933d367f76af3190'
+        auth_token = '9670879ad41fbd9f9f62415c89e791eb'
         client = Client(account_sid, auth_token)
         if "question" in request.data:
             client.messages.create(
