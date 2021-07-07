@@ -129,3 +129,4 @@ dmypy.json
 .pyre/
 
 GameOn/settings.py
+GameOn/currentGame/API.py

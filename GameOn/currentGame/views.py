@@ -6,15 +6,15 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.http import Http404
 from twilio.rest import Client
-from twilio.twiml.messaging_response import MessagingResponse
+from .API import twilio_sid, twilio_auth
 
 
 # Create your views here.
 class TwilioList(APIView):
 
     def post(self, request):
-        account_sid = 'AC5bf22d5d8151082033faf4441f0c4263'
-        auth_token = '9670879ad41fbd9f9f62415c89e791eb'
+        account_sid = twilio_sid
+        auth_token = twilio_auth
         client = Client(account_sid, auth_token)
         if "question" in request.data:
             client.messages.create(
@@ -23,6 +23,8 @@ class TwilioList(APIView):
                 to='+1' + request.data["user"]["phone"],
             )
             return Response(status=status.HTTP_200_OK)
+        elif "JOIN" in request.data:
+            print("JOIN")
         else:
             client.messages.create(
                 body="We got your answer!",
