@@ -10,7 +10,6 @@ from django.http import Http404
 
 class OwnersList(APIView):
 
-
     def get(self, request):
         owner = Owner.objects.all()
         serializer = OwnerSerializer(owner, many=True)
@@ -25,19 +24,20 @@ class OwnersList(APIView):
 
 
 class OwnersDetail(APIView):
-    def get_Owner(self, pk):
+
+    def get_owner(self, key):
         try:
-            return Owner.objects.get(pk=pk)
+            return Owner.objects.get(key=key)
         except Owner.DoesNotExist:
             raise Http404
 
-    def get(self, pk):
-        owner = self.get_owner(pk)
+    def get(self, request, key):
+        owner = self.get_owner(key)
         serializer = OwnerSerializer(owner)
         return Response(serializer.data)
 
-    def put(self, request, pk):
-        owner = self.get_Owner(pk)
+    def put(self, request, key):
+        owner = self.get_owner(key)
         serializer = OwnerSerializer(owner, data=request.data)
         if serializer.is_valid():
             serializer.save()

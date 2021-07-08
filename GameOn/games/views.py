@@ -27,13 +27,13 @@ class GamesDetail(APIView):
 
     def get_game(self, pk):
         try:
-            return Game.objects.get(pk=pk)
+            return Game.objects.all().filter(owner=pk)
         except Game.DoesNotExist:
             raise Http404
 
-    def get(self, pk):
+    def get(self, request, pk):
         game = self.get_game(pk)
-        serializer = GameSerializer(game)
+        serializer = GameSerializer(game, many=True)
         return Response(serializer.data)
 
     def put(self, request, pk):
