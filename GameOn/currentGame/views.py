@@ -16,20 +16,21 @@ class TwilioList(APIView):
         account_sid = twilio_sid
         auth_token = twilio_auth
         client = Client(account_sid, auth_token)
-        if "REDEEM" in request.data:
-            client.messages.create(
-                body="Show this when you go to pay your bill to receive a discount worth " + str(request.data["question"]["REDEEM"]) + " points!",
-                from_='+13126266151',
-                to='+1' + request.data["user"]["phone"]
-            )
-            return Response(status=status.HTTP_200_OK)
-        elif "question" in request.data:
-            client.messages.create(
-                body=request.data["question"]["question"],
-                from_='+13126266151',
-                to='+1' + request.data["user"]["phone"],
-            )
-            return Response(status=status.HTTP_200_OK)
+        if "question" in request.data:
+            if "REDEEM" in request.data['question']:
+                client.messages.create(
+                    body="Show this when you go to pay your bill to receive a discount worth " + str(request.data["question"]["REDEEM"]) + " points!",
+                    from_='+13126266151',
+                    to='+1' + request.data["user"]["phone"]
+                )
+                return Response(status=status.HTTP_200_OK)
+            elif "question" in request.data:
+                client.messages.create(
+                    body=request.data["question"]["question"],
+                    from_='+13126266151',
+                    to='+1' + request.data["user"]["phone"],
+                )
+                return Response(status=status.HTTP_200_OK)
         elif "JOIN" in request.data:
             print("JOIN")
         else:
