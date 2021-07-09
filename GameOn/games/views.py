@@ -31,13 +31,19 @@ class GamesDetail(APIView):
         except Game.DoesNotExist:
             raise Http404
 
+    def start_game(self, pk):
+        try:
+            return Game.objects.get(pk=pk)
+        except Game.DoesNotExist:
+            raise Http404
+
     def get(self, request, pk):
         game = self.get_game(pk)
         serializer = GameSerializer(game, many=True)
         return Response(serializer.data)
 
     def put(self, request, pk):
-        game = self.get_game(pk)
+        game = self.start_game(pk)
         serializer = GameSerializer(game, data=request.data)
         if serializer.is_valid():
             serializer.save()

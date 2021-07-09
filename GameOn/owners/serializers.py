@@ -6,4 +6,4 @@ class OwnerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Owner
-        fields = ['id', 'name', 'address', 'key']
+        fields = ['id', 'name', 'address', 'phone', 'key']

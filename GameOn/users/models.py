@@ -14,4 +14,4 @@ class User(models.Model):
     host = models.BooleanField(default=False)
     logged_in = models.BooleanField(default=False)
     score = models.IntegerField(null=True, blank=True, default=0)
-    is_playing = models.IntegerField(null=True, blank=True)
+    is_playing = models.IntegerField(null=True, blank=True, default=0)
